@@ -15,10 +15,7 @@ public class Sell implements Trade{
 		
 		double totalPrice = position.getValue();
 				
-		if (totalPrice > 0) {
-			throw new Error();
-		}
-		else if (account.positionQuantity(position) <= 0) {
+		if (account.positionQuantity(position) <= 0) {
 			throw new InsufficientPositionsError();
 		}
 		else {

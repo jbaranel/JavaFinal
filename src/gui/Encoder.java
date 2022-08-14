@@ -13,9 +13,14 @@ public class Encoder extends JFrame {
 	
 	private JTextField textInput;
 	private JTextField textOutput;
+	
+	private JLabel productLabel;
 
 	private JButton clearButton;
 	private JComboBox<String> dropdownBox;
+	
+	private JComboBox<String> tradeType;
+
 	
 	private static final int TEXT_WIDTH = 10;
 
@@ -58,7 +63,7 @@ public class Encoder extends JFrame {
 			String ticker = dropdownBox.getSelectedItem().toString();
 			Product product  = tradeProducts.findTicker(ticker);
 
-			textOutput.setText((product.toString()));
+			productLabel.setText((product.toString()));
 	    };
 
 	}
@@ -66,7 +71,7 @@ public class Encoder extends JFrame {
 	public void createPanel() {
 		textInput = new JTextField(Encoder.TEXT_WIDTH);
 		textOutput = new JTextField(Encoder.TEXT_WIDTH);
-		
+		productLabel = new JLabel();
 		clearButton = new JButton("Clear");
 		clearButton.addActionListener((e) -> {
 			textInput.setText("");
@@ -76,6 +81,11 @@ public class Encoder extends JFrame {
 		dropdownBox = new JComboBox<String>();
 		dropdownBox.setEditable(false);
 		
+		
+		tradeType = new JComboBox<String>();
+		tradeType.addItem("Buy");
+		tradeType.addItem("Sell");
+
 		APIData productAPI = new APIData();
 		TradeProducts tradeProducts = new TradeProducts(productAPI);
 		
@@ -101,6 +111,10 @@ public class Encoder extends JFrame {
 		panel.add(textInput);
 		panel.add(clearButton);
 		panel.add(dropdownBox);
+		panel.add(tradeType);
+		panel.add(productLabel);
+
+
 		
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.add(textOutput);

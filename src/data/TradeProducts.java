@@ -11,13 +11,17 @@ import org.json.JSONObject;
 public class TradeProducts {
 	
 	ArrayList<Product> products = null;
+	APIData data;
 	
 	public TradeProducts() {
 		products = new ArrayList<Product>();
+		this.data = new APIData();
+		parse(data);
 	}
 	
 	public TradeProducts(APIData data) {
 		this();
+		this.data = data;
 		parse(data);
 	}
 	
@@ -84,6 +88,11 @@ public class TradeProducts {
 	}
 	
 	public ArrayList<Product> getProducts() {
+		return products;
+	}
+	
+	public ArrayList<Product> refreshProducts() {
+		parse(data);
 		return products;
 	}
 

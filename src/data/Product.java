@@ -24,7 +24,7 @@ public class Product {
 	}
 	
 	public String toString() {
-		return "TICKER: " + this.ticker + ", Name: " + this.name + ", PRICE: $" + this.price + "," + this.price_change_24h+ "%";
+		return this.ticker;
 	}
 
 	public String getTicker() {

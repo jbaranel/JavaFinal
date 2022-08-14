@@ -31,8 +31,7 @@ public class Main {
 		try {
 			sell.execute(sellPos);
 		} catch (InsufficientPositionsError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e);
 		}
 		
 		System.out.println(account.getCashBalance());
@@ -54,8 +53,7 @@ public class Main {
 		try {
 			buy.execute(new Position(btc, 1));
 		} catch (InsufficientFundsError e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e);
 		}		
 		
 		

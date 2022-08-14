@@ -43,12 +43,10 @@ public class TradeAccount implements Account{
 	}
 	
 	public void depositCash(double amount) {
-		if (amount > 0) {
 			this.cash += amount;
 			Product cp = new Product("cash", "cash", amount);
 			Position p = new Position(cp, 1);
 			records.addTrade(p);
-		}
 	}
 	
 	public double withdrawCash(double amount) {
