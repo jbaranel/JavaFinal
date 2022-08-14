@@ -31,8 +31,8 @@ import trade.Sell;
 
 public class App extends JFrame {
 	
-	private static final int WIDTH = 500;
-	private static final int HEIGHT = 500;
+	private static final int WIDTH = 600;
+	private static final int HEIGHT = 250;
 	private static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.00");
 	private static final int TEXT_WIDTH = 5;
 	private ProductPanel productPanel;
@@ -41,6 +41,10 @@ public class App extends JFrame {
 	ProductDropDown productDropDown;
 	JLabel accountLabel = new JLabel();
 	TradeProducts products;
+	JLabel nameLabel;
+	JLabel tickerLabel;
+	JLabel priceLabel;
+	JLabel price_changeLabel;
 	
 	public App() {
 		Database db = new MySQLDatabase("CryptoData", "java", "");
@@ -99,6 +103,8 @@ public class App extends JFrame {
 				Buy buy = new Buy(account);
 				try {
 					buy.execute(trade);
+					JOptionPane.showMessageDialog(this, "Bought " + trade.getQuantity() + " " + trade.getTicker(),
+				               "Success", JOptionPane.PLAIN_MESSAGE);
 				} catch (InsufficientFundsError e1) {
 					JOptionPane.showMessageDialog(this, e1.getMessage(),
 				               "Insufficient Funds", JOptionPane.ERROR_MESSAGE);
@@ -110,6 +116,8 @@ public class App extends JFrame {
 				Sell sell = new Sell(account);
 				try {
 					sell.execute(trade);
+					JOptionPane.showMessageDialog(this, "Sold " + trade.getQuantity()*-1 + " " + trade.getTicker(),
+				               "Success", JOptionPane.PLAIN_MESSAGE);
 				} catch (InsufficientPositionsError e1) {
 					JOptionPane.showMessageDialog(this, e1.getMessage(),
 				               "Insufficient Positions", JOptionPane.ERROR_MESSAGE);
@@ -118,6 +126,7 @@ public class App extends JFrame {
 			
 			Double accountBalance = account.getCashBalance();
 			String balance = DECIMAL_FORMAT.format(accountBalance);
+			quantityInput.setText("");
 			accountLabel.setText("$" + balance);
 			
 			
@@ -132,12 +141,16 @@ public class App extends JFrame {
 		JTextField depositInput = new JTextField(App.TEXT_WIDTH);
 		JButton depositButton = new JButton("Deposit");
 		depositButton.addActionListener((e) -> {
-			Double amount = Double.parseDouble(depositInput.getText());
-			account.depositCash(amount);
-			depositInput.setText("");
-			Double accountBalance = account.getCashBalance();
-			String balance = DECIMAL_FORMAT.format(accountBalance);
-			accountLabel.setText("$" + balance);
+			try {
+				Double amount = Double.parseDouble(depositInput.getText());
+				account.depositCash(amount);
+				depositInput.setText("");
+				Double accountBalance = account.getCashBalance();
+				String balance = DECIMAL_FORMAT.format(accountBalance);
+				accountLabel.setText("$" + balance);
+				JOptionPane.showMessageDialog(this, "Deposited $" + amount,
+						"Success", JOptionPane.PLAIN_MESSAGE);				
+			} catch (Exception err) {}
 		});
 		
 		Double accountBalance = account.getCashBalance();
@@ -179,10 +192,15 @@ public class App extends JFrame {
 			
 			addActionListener((e) -> {
 				Product selectedProduct = (Product) this.getSelectedItem();
-				productPanel.removeAll();
-				productPanel = new ProductPanel(selectedProduct);
-				topPanel.add(productPanel,BorderLayout.EAST);
-				System.out.println(selectedProduct);
+				nameLabel.setText(selectedProduct.getName());
+				tickerLabel.setText(selectedProduct.getTicker());
+				
+				String price = DECIMAL_FORMAT.format(selectedProduct.getPrice());
+				priceLabel.setText("$" + price);
+				
+				String change = DECIMAL_FORMAT.format(selectedProduct.getPrice_change_24h());
+				price_changeLabel.setText(change + "%");
+
 			});
 		}
 	}
@@ -194,11 +212,6 @@ public class App extends JFrame {
 		Double price;
 		Double price_change;
 		Product product;
-		
-		JLabel nameLabel;
-		JLabel tickerLabel;
-		JLabel priceLabel;
-		JLabel price_changeLabel;
 		
 		public ProductPanel() {
 			nameLabel = new JLabel();
