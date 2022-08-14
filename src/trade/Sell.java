@@ -19,7 +19,7 @@ public class Sell implements Trade{
 			throw new InsufficientPositionsError();
 		}
 		else {
-			account.depositCash(totalPrice);
+			account.depositCash(-totalPrice);
 			account.addPosition(position);
 		}
 

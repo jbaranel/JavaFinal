@@ -40,6 +40,7 @@ public class App extends JFrame {
 	private TradeAccount account;
 	ProductDropDown productDropDown;
 	JLabel accountLabel = new JLabel();
+	TradeProducts products;
 	
 	public App() {
 		Database db = new MySQLDatabase("CryptoData", "java", "");
@@ -124,7 +125,6 @@ public class App extends JFrame {
 	}
 
 	public void initDepositPanel() {
-		//Deposit
 		accountLabel = new JLabel();
 		
 		JPanel depositPanel = new JPanel();
@@ -158,8 +158,8 @@ public class App extends JFrame {
 		productDropDown = new ProductDropDown();
 		dropdownPanel.add(productDropDown);
 		topPanel.add(dropdownPanel, BorderLayout.WEST);
-
-		productPanel  = new ProductPanel("Bitcoin", "BTC", 2000.0, 34.4);
+		
+		productPanel  = new ProductPanel(products.getProducts().get(0));
 		topPanel.add(productPanel,BorderLayout.EAST);
 		
 		add(topPanel,BorderLayout.WEST);
@@ -167,11 +167,10 @@ public class App extends JFrame {
 	}
 	
 	class ProductDropDown extends JComboBox<Product>{
-		TradeProducts products;
 		
 		public ProductDropDown() {
 			setEditable(false);
-			TradeProducts products = new TradeProducts();
+			products = new TradeProducts();
 			products.sortByTicker(true);
 			products.getProducts().forEach((p) -> {
 				addItem(p);			
@@ -180,6 +179,7 @@ public class App extends JFrame {
 			
 			addActionListener((e) -> {
 				Product selectedProduct = (Product) this.getSelectedItem();
+				productPanel.removeAll();
 				productPanel = new ProductPanel(selectedProduct);
 				topPanel.add(productPanel,BorderLayout.EAST);
 				System.out.println(selectedProduct);
